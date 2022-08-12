@@ -11,6 +11,12 @@ const gameBoard = (() => {
 
     const tiles = document.querySelectorAll(".tile");
     let allTiles = [];
+    const currentTurnField = document.querySelector("#currentTurn");
+    
+    const setUpPlayersTurn = () => {
+        currentTurnField.textContent = gameController.getCurrentPlayer().getName();
+        currentTurnField.style.color = gameController.getCurrentPlayer().getColor();
+    }
 
     let index = 0;
     const setupTiles = () => Array.from(tiles).forEach(tile => {
@@ -23,14 +29,20 @@ const gameBoard = (() => {
     const tileClicked = (e) =>{
         let clickedID = e.target.getAttribute("data-id");
         targetTile = gameBoard.getSingleTile(clickedID);
-        markTile(targetTile);
-        gameController.turnFinished();
+        if(markTile(targetTile)){
+            gameController.turnFinished();
+            setUpPlayersTurn();
+        }
     }
 
     const markTile = (targetTile) =>{
-        if(!targetTile.isOccupied){
+        if(!targetTile.getIsOccupied()){
             targetTile.node.textContent = gameController.getCurrentPlayer().getSymbol();
+            targetTile.node.style.color = gameController.getCurrentPlayer().getColor();
+            targetTile.setOccupied(true);
+            return true;
         }
+        return false;
     }
     
     const isEmpty = (tileContent) =>{
@@ -41,15 +53,15 @@ const gameBoard = (() => {
         return allTiles.find((element) => element.id == id);
     }
 
-    return { setupTiles, getSingleTile, isEmpty };
+    return { setupTiles, setUpPlayersTurn, getSingleTile, isEmpty };
 
 })();
 
 const gameController = (() => {
 
     const ROUNDSTOPLAY = 9;
-    const player1 = Player("Player 1", "x", "blue");
-    const player2 = Player("Player 2", "o", "red");
+    const player1 = Player("Player 1", "x", "#d4a4d7");
+    const player2 = Player("Player 2", "o", "#5d86b4");
 
     let currentPlayer = player1;
 
@@ -76,14 +88,13 @@ function Tile(node, id){
     this.node = node;
     this.id = id;
     this.isOccupied = false;
-    const setOccupied = (value) => {
+    this.setOccupied = (value) =>{
         this.isOccupied = value;
     }
-    const isOccupied = () => {
+    this.getIsOccupied = function(){
         return this.isOccupied;
     }
-
-
 }
 
 gameBoard.setupTiles();
+gameBoard.setUpPlayersTurn();
