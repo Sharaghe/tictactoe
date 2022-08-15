@@ -14,7 +14,7 @@ const gameBoard = (() => {
     const currentTurnField = document.querySelector("#currentTurn");
     
     const setUpPlayersTurn = () => {
-        currentTurnField.textContent = gameController.getCurrentPlayer().getName();
+        currentTurnField.textContent = gameController.getCurrentPlayer().getName() + "'s turn";
         currentTurnField.style.color = gameController.getCurrentPlayer().getColor();
     }
 
