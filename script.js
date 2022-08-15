@@ -22,38 +22,45 @@ const gameBoard = (() => {
     const setupTiles = () => Array.from(tiles).forEach(tile => {
         tile.addEventListener("click", tileClicked);
         tile.setAttribute("data-id", index);
-        allTiles.push(new Tile(tile, index));
+        let position = tile.getAttribute("data-pos");
+        allTiles.push(new Tile(tile, index, position));
         index++;
+    });
+
+    const endGame = () => Array.from(allTiles).forEach(tile => {
+        tile.node.removeEventListener("click", tileClicked);
+        tile.node.classList.add("notClickable");
     });
 
     const tileClicked = (e) =>{
         let clickedID = e.target.getAttribute("data-id");
         targetTile = gameBoard.getSingleTile(clickedID);
         if(markTile(targetTile)){
-            gameController.turnFinished();
-            setUpPlayersTurn();
+            if(gameController.checkForWinner()){
+                endGame();
+            } else {
+                gameController.turnFinished();
+                setUpPlayersTurn();
+            }
         }
     }
 
     const markTile = (targetTile) =>{
         if(!targetTile.getIsOccupied()){
             targetTile.node.textContent = gameController.getCurrentPlayer().getSymbol();
+            targetTile.node.classList.add("notClickable");
             targetTile.node.style.color = gameController.getCurrentPlayer().getColor();
             targetTile.setOccupied(true);
             return true;
         }
         return false;
     }
-    
-    const isEmpty = (tileContent) =>{
-        return tileContent != "x" && tileContent != "o";
-    }
 
     const getSingleTile = (id) => {
         return allTiles.find((element) => element.id == id);
     }
 
-    return { setupTiles, setUpPlayersTurn, getSingleTile, isEmpty };
+    return { setupTiles, setUpPlayersTurn, getSingleTile, endGame };
 
 })();
 
@@ -79,14 +86,38 @@ const gameController = (() => {
 
     const checkForWinner = () => {
 
+        if(checkRows()){
+            console.log(currentPlayer.getName() + " wins");
+            return true;
+        }
+
+        return false;
+    }
+
+    const checkRows = () => {
+
+        for (let j = 0; j < 7; j = j + 3) {
+
+            let rows = [];
+            for (let i = 0 + j; i < 3 + j; i++) {
+                rows.push(gameBoard.getSingleTile(i));
+            }
+
+            if(rows.filter((element) => element.node.textContent == "o").length >2 
+            || rows.filter((element) => element.node.textContent == "x").length >2){
+                return true;
+            }     
+            
+        }
     }
 
     return { turnFinished, getCurrentPlayer, checkForWinner };
 })();
 
-function Tile(node, id){
+function Tile(node, id, position){
     this.node = node;
     this.id = id;
+    this.position = position;
     this.isOccupied = false;
     this.setOccupied = (value) =>{
         this.isOccupied = value;
@@ -98,3 +129,5 @@ function Tile(node, id){
 
 gameBoard.setupTiles();
 gameBoard.setUpPlayersTurn();
+
+
