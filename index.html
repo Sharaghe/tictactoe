@@ -12,7 +12,7 @@
     <div class="wrapper">
         <h1>Tic Tac Toe</h1>
         <div class="credentials">
-            <form action="">
+            <form id="startGame" action="">
                 <fieldset>
                     <legend>Player 1</legend>
 
@@ -43,21 +43,23 @@
 
                 </fieldset>
 
-                <button type="submit" class="startGame">Start Game</button>
+                <button type="submit">Start Game</button>
             </form>
         </div>
-        <div class="tile-wrapper">
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
+        <div class="board">
+            <div class="tile-wrapper">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <h2 id="currentTurn"></h2>
         </div>
-        <h2 id="currentTurn"></h2>
     </div>
 </body>
 </html>

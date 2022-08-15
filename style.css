@@ -67,8 +67,12 @@ fieldset {
     font-size: .9rem;
 }
 
-.tile-wrapper{
+.board{
     display: none;
+}
+
+.tile-wrapper{
+    display: inline-grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 10px;
@@ -102,7 +106,6 @@ h1{
 }
 
 #currentTurn{
-    display: none;
     background: white;
     padding: 15px 30px;
     text-align: center;

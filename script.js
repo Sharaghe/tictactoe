@@ -9,10 +9,20 @@ const Player = (name, symbol, color) => {
 
 const gameBoard = (() => {
 
+    const playerScreen = document.querySelector(".credentials");
+    const board = document.querySelector(".board");
+
     const tiles = document.querySelectorAll(".tile");
     let allTiles = [];
     const currentTurnField = document.querySelector("#currentTurn");
-    const startGameButton = document.querySelector(".startGame");
+    const startGameForm = document.querySelector("#startGame");
+
+    const inputs = {
+        p1: document.querySelector("input#p1"),
+        p2: document.querySelector("input#p2"),
+        c1: document.querySelector("input#c1"),
+        c2: document.querySelector("input#c2")
+    };
     
     const setUpPlayersTurn = () => {
         currentTurnField.textContent = gameController.getCurrentPlayer().getName() + "'s turn";
@@ -63,11 +73,20 @@ const gameBoard = (() => {
         return allTiles.find((element) => element.id == id);
     }
 
-    const startGame = () => {
-
+    const startGame = (e) => {
+        e.preventDefault();
+        gameController.createPlayer(inputs.p1.value, "x", inputs.c1.value);
+        gameController.createPlayer(inputs.p2.value, "o", inputs.c2.value);
+        gameController.startGame();
+        makeBoardVisible();
     }
 
-    startGameButton.addEventListener("click", startGame);
+    const makeBoardVisible = () => {
+        playerScreen.style.display = "none";
+        board.style.display = "block";
+    }
+
+    startGameForm.addEventListener("submit", startGame);
 
     return { setupTiles, setUpPlayersTurn, getSingleTile, endGame };
 
@@ -80,8 +99,8 @@ const gameController = (() => {
     let currentPlayer;
     let players = [];
 
-    const turnFinished = (id, symbol) => {
-        setCurrentPlayer((getCurrentPlayer() == player1) ? player2 : player1);
+    const turnFinished = () => {
+        setCurrentPlayer((getCurrentPlayer() == players[0]) ? players[1] : players[0]);
     }
 
     const startGame = () => {
@@ -89,12 +108,12 @@ const gameController = (() => {
         gameBoard.setUpPlayersTurn();   
     }
 
-    const createUser = (username, symbol, color) => {
+    const createPlayer = (username, symbol, color) => {
         players.push(Player(username, symbol, color))
     }
 
     const getCurrentPlayer = () => {
-        return currentPlayer;
+        return currentPlayer || players[0];
     }
 
     const setCurrentPlayer = (player) => {
@@ -178,7 +197,7 @@ const gameController = (() => {
         });
     }
 
-    return { turnFinished, getCurrentPlayer, checkForWinner };
+    return { turnFinished, getCurrentPlayer, checkForWinner, createPlayer, startGame };
 })();
 
 function Tile(node, id){
