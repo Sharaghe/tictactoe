@@ -23,6 +23,11 @@ form{
     padding: 0 10px;
 }
 
+fieldset {
+    display: flex;
+    gap: 10px;
+}
+
 .credentials input{
     width: 100%;
     display: block;
@@ -33,6 +38,10 @@ form{
     margin-top: 4px;
     outline: none;
     box-sizing: border-box;
+}
+
+.credentials input[type="color"]{
+    padding: 0;
 }
 
 .credentials button{

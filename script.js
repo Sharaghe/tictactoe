@@ -12,6 +12,7 @@ const gameBoard = (() => {
     const tiles = document.querySelectorAll(".tile");
     let allTiles = [];
     const currentTurnField = document.querySelector("#currentTurn");
+    const startGameButton = document.querySelector(".startGame");
     
     const setUpPlayersTurn = () => {
         currentTurnField.textContent = gameController.getCurrentPlayer().getName() + "'s turn";
@@ -22,8 +23,7 @@ const gameBoard = (() => {
     const setupTiles = () => Array.from(tiles).forEach(tile => {
         tile.addEventListener("click", tileClicked);
         tile.setAttribute("data-id", index);
-        let position = tile.getAttribute("data-pos");
-        allTiles.push(new Tile(tile, index, position));
+        allTiles.push(new Tile(tile, index));
         index++;
     });
 
@@ -63,6 +63,12 @@ const gameBoard = (() => {
         return allTiles.find((element) => element.id == id);
     }
 
+    const startGame = () => {
+
+    }
+
+    startGameButton.addEventListener("click", startGame);
+
     return { setupTiles, setUpPlayersTurn, getSingleTile, endGame };
 
 })();
@@ -70,13 +76,21 @@ const gameBoard = (() => {
 const gameController = (() => {
 
     const ROUNDSTOPLAY = 9;
-    const player1 = Player("Player 1", "x", "#d4a4d7");
-    const player2 = Player("Player 2", "o", "#5d86b4");
 
-    let currentPlayer = player1;
+    let currentPlayer;
+    let players = [];
 
     const turnFinished = (id, symbol) => {
         setCurrentPlayer((getCurrentPlayer() == player1) ? player2 : player1);
+    }
+
+    const startGame = () => {
+        gameBoard.setupTiles();
+        gameBoard.setUpPlayersTurn();   
+    }
+
+    const createUser = (username, symbol, color) => {
+        players.push(Player(username, symbol, color))
     }
 
     const getCurrentPlayer = () => {
@@ -167,10 +181,9 @@ const gameController = (() => {
     return { turnFinished, getCurrentPlayer, checkForWinner };
 })();
 
-function Tile(node, id, position){
+function Tile(node, id){
     this.node = node;
     this.id = id;
-    this.position = position;
     this.isOccupied = false;
     this.setOccupied = (value) =>{
         this.isOccupied = value;
@@ -180,7 +193,6 @@ function Tile(node, id, position){
     }
 }
 
-gameBoard.setupTiles();
-gameBoard.setUpPlayersTurn();
+
 
 

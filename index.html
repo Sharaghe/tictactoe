@@ -13,13 +13,37 @@
         <h1>Tic Tac Toe</h1>
         <div class="credentials">
             <form action="">
-                <label for="p1">Enter name for player 1</label>
-                <input type="text" name="p1" id="p1" />
+                <fieldset>
+                    <legend>Player 1</legend>
 
-                <label for="p2">Enter name for player 2</label>
-                <input type="text" name="p2" id="p2" />
+                    <div class="name">
+                        <label for="p1">Name</label>
+                        <input type="text" name="p1" id="p1" />
+                    </div>
 
-                <button type="submit">Start Game</button>
+                    <div class="color">
+                        <label for="c1">Color</label>
+                        <input type="color" name="c1" id="c1" value="#d4a4d7" />
+                    </div>
+
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Player 2</legend>
+
+                    <div class="name">
+                        <label for="p2">Name</label>
+                        <input type="text" name="p2" id="p2" />
+                    </div>
+
+                    <div class="color">
+                        <label for="c2">Color</label>
+                        <input type="color" name="c2" id="c2" value="#5d86b4" />
+                    </div>
+
+                </fieldset>
+
+                <button type="submit" class="startGame">Start Game</button>
             </form>
         </div>
         <div class="tile-wrapper">
