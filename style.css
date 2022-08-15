@@ -45,6 +45,10 @@ h1{
     font-weight: 500;
 }
 
+.highlight{
+    background: rgb(64 125 152);
+}
+
 #currentTurn{
     background: white;
     padding: 15px;

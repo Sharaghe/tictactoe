@@ -27,10 +27,13 @@ const gameBoard = (() => {
         index++;
     });
 
-    const endGame = () => Array.from(allTiles).forEach(tile => {
+    const endGame = () => {
+        Array.from(allTiles).forEach(tile => {
         tile.node.removeEventListener("click", tileClicked);
         tile.node.classList.add("notClickable");
     });
+    console.log(gameController.getCurrentPlayer().getName() +  " wins!");
+    }
 
     const tileClicked = (e) =>{
         let clickedID = e.target.getAttribute("data-id");
@@ -86,8 +89,7 @@ const gameController = (() => {
 
     const checkForWinner = () => {
 
-        if(checkRows()){
-            console.log(currentPlayer.getName() + " wins");
+        if(checkRows() || checkColumns() || checkDiagonals()){
             return true;
         }
 
@@ -105,10 +107,61 @@ const gameController = (() => {
 
             if(rows.filter((element) => element.node.textContent == "o").length >2 
             || rows.filter((element) => element.node.textContent == "x").length >2){
+                highlight(rows);
                 return true;
             }     
             
         }
+    }
+
+    const checkColumns = () => {
+
+        for (let j = 0; j < 3; j++) {
+
+            let cols = [];
+            for (let i = 0 + j; i < 9; i = i + 3) {
+                cols.push(gameBoard.getSingleTile(i));
+            }
+
+            if(cols.filter((element) => element.node.textContent == "o").length >2 
+            || cols.filter((element) => element.node.textContent == "x").length >2){
+                highlight(cols);
+                return true;
+            }     
+            
+        }
+    }
+
+    const checkDiagonals = () => {
+
+            let diagonals1 = [];
+            for (let i = 0; i < 9; i = i + 4) {
+                diagonals1.push(gameBoard.getSingleTile(i));
+            }
+
+            let diagonals2 = [];
+            for (let i = 2; i < 7; i = i + 2) {
+                diagonals2.push(gameBoard.getSingleTile(i));
+            }
+
+            if(diagonals1.filter((element) => element.node.textContent == "o").length >2 
+            || diagonals1.filter((element) => element.node.textContent == "x").length >2
+            ){
+                highlight(diagonals1);
+                return true;
+            }   
+
+            if(diagonals2.filter((element) => element.node.textContent == "o").length >2 
+            || diagonals2.filter((element) => element.node.textContent == "x").length >2){
+                highlight(diagonals2);
+                return true;
+            }     
+    }
+
+    const highlight = (lines) => {
+        lines.forEach(element => {
+            element.node.classList.add("highlight");
+        });
     }
 
     return { turnFinished, getCurrentPlayer, checkForWinner };
