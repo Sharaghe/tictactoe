@@ -16,6 +16,7 @@ const gameBoard = (() => {
     let allTiles = [];
     const currentTurnField = document.querySelector("#currentTurn");
     const startGameForm = document.querySelector("#startGame");
+    const restartButton = document.querySelector(".restart");
 
     const inputs = {
         p1: document.querySelector("input#p1"),
@@ -37,16 +38,26 @@ const gameBoard = (() => {
         index++;
     });
 
-    const endGame = () => {
+    const restartGame = () => {
+        location.reload();
+    }
+
+    restartButton.addEventListener("click", restartGame);
+
+    const endGame = (draw = false) => {
         Array.from(allTiles).forEach(tile => {
         tile.node.removeEventListener("click", tileClicked);
         tile.node.classList.add("notClickable");
     });
-    declareWinner();
+    declareWinner(draw);
     }
 
-    const declareWinner = () =>{
-        currentTurnField.textContent = gameController.getCurrentPlayer().getName() + " wins!";
+    const declareWinner = (draw) =>{
+        if(draw){
+            currentTurnField.textContent = "Draw!";
+        } else {
+            currentTurnField.textContent = gameController.getCurrentPlayer().getName() + " wins!";
+        }
     }
 
     const tileClicked = (e) =>{
@@ -57,7 +68,6 @@ const gameBoard = (() => {
                 endGame();
             } else {
                 gameController.turnFinished();
-                setUpPlayersTurn();
             }
         }
     }
@@ -98,13 +108,20 @@ const gameBoard = (() => {
 
 const gameController = (() => {
 
-    const ROUNDSTOPLAY = 9;
+    let roundstoplay = 9;
 
     let currentPlayer;
     let players = [];
 
     const turnFinished = () => {
-        setCurrentPlayer((getCurrentPlayer() == players[0]) ? players[1] : players[0]);
+        roundstoplay--;
+
+        if(roundstoplay < 1){
+            gameBoard.endGame(true);
+        } else {
+            gameBoard.setUpPlayersTurn();
+            setCurrentPlayer((getCurrentPlayer() == players[0]) ? players[1] : players[0]);
+        }
     }
 
     const startGame = () => {
