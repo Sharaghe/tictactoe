@@ -42,7 +42,11 @@ const gameBoard = (() => {
         tile.node.removeEventListener("click", tileClicked);
         tile.node.classList.add("notClickable");
     });
-    console.log(gameController.getCurrentPlayer().getName() +  " wins!");
+    declareWinner();
+    }
+
+    const declareWinner = () =>{
+        currentTurnField.textContent = gameController.getCurrentPlayer().getName() + " wins!";
     }
 
     const tileClicked = (e) =>{
